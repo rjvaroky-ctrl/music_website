@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano Covers</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Remove default margin and padding */
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Sticky Navbar at the top */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1020;
+    }
+
+    /* Ensure content does not get hidden under navbar */
+    body {
+      padding-top: 56px; /* Adjusted to navbar height */
+    }
+
+    /* Header adjustments */
+    header {
+      background-image: url('piano.jpg');
+      background-size: cover;
+      background-position: center;
+      width: 100vw;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    /* Song list button adjustments */
+    /* Each button takes full width inside its grid column */
+    #videoContainer .btn {
+      width: 70%;
+      height: 180px; /* Reduced height for a compact look */
+      font-size: 16px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 10px;
+    }
+
+    /* Reduce spacing between columns */
+    #videoContainer .col-md-4 {
+      padding-left: 2px;
+      padding-right: 2px;
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Piano Covers</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle btn btn-primary text-white" href="#" id="categoryDropdown" 
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Select Category
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#" onclick="showSongs('anime')">Anime</a></li>
+              <li><a class="dropdown-item" href="#" onclick="showSongs('hindi')">Hindi</a></li>
+              <li><a class="dropdown-item" href="#" onclick="showSongs('english')">English</a></li>
+              <li><a class="dropdown-item" href="#" onclick="showSongs('regional')">Regional</a></li>
+              <li><a class="dropdown-item" href="#" onclick="showSongs('performance')">Performance</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-secondary ms-3" onclick="goBackToSongs()">Back to Song List</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <header>
+    <h1 class="fw-bold"><i class="bi bi-music-note-beamed"></i> Piano Covers</h1>
+  </header>
+
+  <!-- Main Content Section -->
+  <div class="container my-5">
+    <!-- Make videoContainer a Bootstrap row for grid layout -->
+    <div id="videoContainer" class="row">
+      <div class="alert alert-info text-center">Select a category from the navigation bar to see songs.</div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="bg-dark text-white text-center py-4">
+    <p>Contact: ronaldj@iitk.ac.in | Inspired by no one</p>
+    <p>
+      <a href="https://www.instagram.com/ronaldxjoseph/?hl=en" class="text-white me-3" target="_blank">Instagram</a>
+      <a href="https://www.youtube.com/@ronaldjoseph2925" class="text-white" target="_blank">YouTube</a>
+    </p>
+  </footer>
+
+  <script>
+    let lastCategory = null;
+
+    const videoData = {
+      anime: [
+        { title: 'Again_ Full metal Alchemist', src: 'anime/_Again_ Full metal Alchemist.mp4',img: 'anime/FMA.jpg' },
+        { title: 'Fairy Tail Anime Cover', src: 'anime/48 th one Fairy tail anime cover.mp4',img: 'anime/FAIRY_TAIL.jpg' },
+        { title: 'Blue Bird Naruto Shippuden', src: 'anime/Blue Bird Naruto shippuden Piano Cover with Visuals _ Ronald Joseph.mp4',img: 'anime/blue_bird.jpg' },
+        { title: 'Death Note - The World Main Theme', src: 'anime/Death Note _The World_ Main Theme.mp4',img: 'anime/death_note.jpg'},
+        { title: 'Demon Slayer Theme', src: 'anime/Demon Slayer Theme _ Ronald Joseph.mp4',img: 'anime/demon_slayer.jpg' },
+        { title: 'Detective Conan Main Theme', src: 'anime/Detective Conan Main Theme.mp4',img: 'anime/detective_conan.jpg' },
+        { title: 'Fonzi Ms Attack on Titan Cover (30 seconds)', src: 'anime/Fonzi Ms Attack on Titan Cover (1st 30 seconds Try)😂.mp4',img: 'anime/aot.jpg' },
+        { title: 'Naruto Sadness & Sorrow Piano Cover with Visuals', src: 'anime/Naruto Sadness & Sorrow Piano Cover with Visuals.mp4',img: 'anime/naruto_sadness.jpg' },
+        { title: 'Naruto Shippuden Blue Bird Cover', src: 'anime/Naruto Shippuden Blue Bird Cover.mp4',img: 'anime/naruto_blue_bird.jpg' },
+        { title: 'Naruto Shippuden Blue Bird Piano Cover', src: 'anime/Naruto Shippuden Blue Bird Piano Cover.mp4',img: 'anime/naruto.jpg' },
+        { title: 'One Piece Pirates of the Caribbean Mashup Cover', src: 'anime/One Piece Pirates of Carriebean mashup Cover.mp4',img: 'anime/pirates.jpg' },
+        { title: 'One Piece Anime - We are theme', src: 'anime/One Piece Anime Cover.mp4',img: 'anime/we_are.jpg' },
+        { title: 'One Piece Very Very Strongest Cover', src: 'anime/One Piece Very Very Strongest Cover.mp4',img: 'anime/strongest.jpg' },
+        { title: 'Parasyte - Next to You ', src: 'anime/Parasyte Next to You.mp4',img: 'anime/parasyte.jpg' },
+        { title: 'Parasyte OST - Next to You Piano', src: 'anime/Parasyte OST - Next to You Piano.mp4',img: 'anime/parasyte_ost.jpg' },
+        { title: 'Pokemon Theme Song Keyboard Cover with Comic Visuals', src: 'anime/Pokemon Theme Song Keyboard Cover with Comic Visuals.mp4',img: 'anime/pokemon.jpg' },
+        { title: 'Pokemon Theme', src: 'anime/Pokemon Theme.mp4',img: 'anime/pokemon_theme.jpg'  },
+        { title: 'Shinchan Theme', src: 'anime/Shinchan Theme Cover.mp4',img: 'anime/shinchan.jpg'  },
+        { title: 'Sparkle Cover (Your Name)', src: 'anime/Sparkle Cover (Your Name).mp4',img: 'anime/your_name.jpg' },
+        { title: 'Unravel - Tokyo Ghoul', src: 'anime/Unravel - Tokyo Ghoul Cover.mp4',img: 'anime/ghoul.jpg' },
+        { title: 'Vinland Saga Theme', src: 'anime/Vinland Saga Theme.mp4',img: 'anime/Vinlandsaga.jpg'}        
+      ],
+      hindi: [
+        { title: 'Humourously Yours', src: 'hindi/21 December 2024.mp4', img: 'hindi/humourously_yours.jpg'},
+        { title: 'Chaand Baaliyaan Keyboard Cover', src: 'hindi/Chaand Baaliyaan Keyboard Cover.mp4', img: 'hindi/chaand_baaliyan.jpg'},
+        { title: 'Abhi Mujme Agneepath', src: 'hindi/Abhi Mujme _ Agneepath _ before Darshan Raval performs at IITK today.mp4', img: 'hindi/Abhi.jpg'},
+        { title: 'Aye Khuda Piano Arrangement', src: 'hindi/Aye Khuda Piano Arrangement _ Paathshaala _ Ronald J..mp4', img:'hindi/aye_khuda.jpg' },
+        { title: 'Dhoom 3 Bande h hum uske Piano Cover with Visuals', src: 'hindi/Dhoom 3 Bande h hum uske Piano Cover with Visuals.mp4',img:'hindi/dhoom3.jpg' },
+        { title: 'Dil Mere (Local Train) Keyboard Cover, with lyrics and Visuals', src: 'hindi/Dil Mere (Local Train) Keyboard Cover, with lyrics and Visuals.mp4', img: 'hindi/local_train.jpg' },
+        { title: 'Gul Anuv Jain Cover', src: 'hindi/Gul Anuv Jain Cover.mp4',img:'hindi/gul.jpg', img: 'hindi/gul.jpg' },
+        { title: 'KABHI TUMHE SHERSHAH KEYBOARD COVER WITH VOCALS', src: 'hindi/KABHI TUMHE _ SHERSHAH _ KEYBOARD COVER WITH VOCALS.mp4', img:'hindi/kabhi_tumhe.jpg' },
+        { title: 'Lehra do Piano Cover - 83 (2021)', src: 'hindi/Lehra do Piano Cover - 83 (2021).mp4', img: 'hindi/lehra_do.jpg' },
+        { title: 'Manjha Keyboard Cover (Kai Po Che Movie Theme) in a minute', src: 'hindi/Manjha Keyboard Cover (Kai Po Che Movie Theme) in a minute.mp4' , img: 'hindi/manjha.jpg' },
+        { title: 'moh moh ke dhaage × Abhi Mujme (agneepath) piano cover', src: 'hindi/moh moh ke dhaage × Abhi Mujme (agneepath) piano cover.mp4', img: 'hindi/moh.jpg' },
+        { title: 'Paani Da Rang Piano Arrangement', src: 'hindi/Paani Da Rang Piano Arrangement.mp4' , img: 'hindi/paani_da.jpg' },
+        { title: 'Pasoori Piano Cover', src: 'hindi/Pasoori Piano Cover.mp4', img: 'hindi/pasoori.jpg' }
+      ],
+      english: [
+        { title: '4 Piano Covers in a Minute', src: 'english/4 Piano Covers in a minute (by Ronald Joseph).mp4', img: 'english/4song_1_min.jpg'},
+        { title: 'Asimple thing', src: 'english/15 August 2024.mp4', img: 'english/simple_thing.jpg'},
+        { title: 'All of Me - Piano Cover with Lyrics', src: 'english/All of me Piano Cover  with Lyrics.mp4', img:'english/all_of_me.jpg' },
+        { title: 'Canon Rock Cover (in D)', src: 'english/Canon Rock Cover (in D).mp4', img: 'english/CANON.png' },
+        { title: 'Chainsmokers Something Just Like This with Sheet Music & Lyrics', src: 'english/Chainsmokers _Something Just Like This_ Piano Cover with Sheet Music & Lyrics.mp4', img: 'english/something.jpg' },
+        { title: 'Coldplay - Viva La Vida', src: 'english/Viva La Vida Piano Cover.mp4',img:'english/viva_la_vida.jpg' },
+        { title: 'Coolios Gangsta Paradise (Dangerous Minds 95)', src: 'english/Gangsta Paradise.mp4',img:'english/gangsta.jpg' },
+        { title: 'Despacito', src: 'english/Despacito.mp4',img:'english/despacito.jpg' },
+        { title: 'Eminems Mocking Bird Piano Cover with Drums', src: 'english/Mocking Bird Piano Cover with drums.mp4',img:'english/mocking_bird.jpg' },
+        { title: 'Fast & Furious 3 Tokyo Drift (6 Day War Song Piano Cover)', src: 'english/6 day War.mp4',img:'english/tokyo_drift.jpg' },
+        { title: 'Four-Song Keyboard Mashup: Guns N Roses, Manjha, Uyiril Thodum, Pokemon Theme Song', src: 'english/Keyboard Mashup  Guns N Roses Manjha Uyiril Thodum Pokemon Theme.mp4',img:'english/4song_1_min.jpg' },
+        { title: 'Game of Thrones Main Theme', src: 'english/Game of Thrones Main Theme Piano Cover.mp4',img:'english/got.jpg' },
+        { title: 'Hall of Fame Piano Cover with FIFA Visuals', src: 'english/Hall of Fame Piano Cover with FIFA Visuals.mp4',img:'english/hall_of_fame.jpg' },
+        { title: 'Hall of Fame Piano Cover', src: 'english/Hall of Fame Piano Cover.mp4',img:'english/hall_of_fame1.jpg' },
+        { title: 'Hymn for the Weekend Piano Cover', src: 'english/Hymn for the Weekend Piano Cover.mp4',img:'english/hymn_for_weekend.jpg'},
+        { title: 'Linkin Park - Numb Piano Cover', src: 'english/Linkin Park Numb Piano.mp4',img:'english/numb.jpg' },
+        { title: 'Linkin Park Numb , All of Me , Chainsmokers , Waving Flag Piano Cover in a Minute', src: 'english/Linkin Park Numb All of me Chainsmokers Waving Flag.mp4',img:'english/4song_1_min.jpg' },
+        { title: 'Pirates of the Caribbean - He is a Pirate with Comic Visuals', src: 'english/He is a Pirate.mp4',img:'english/pirate.jpg' },
+        { title: 'Pirates of the Caribbean Main Theme', src: 'english/Pirates of the Caribbean Main Theme.mp4',img:'english/pirates1.jpg' },
+        { title: 'Stan Eminem Dido Thank You', src: 'english/Stan.mp4',img:'english/stan.jpg' },
+        { title: 'Waving Flag', src: 'english/Waving Flag.mp4',img:'english/waving_flag.jpg' },
+        { title: 'River Flows in You', src: 'english/River flows in you.mp4', img:'english/river_flows_in_you.jpg' }
+      ],
+      regional: [
+        { title: 'Bangalore Days - Piano Cover', src: 'regional/banglore days _ piano cover.mp4',img:'regional/banglore_days.jpg' },
+        { title: 'Parayuvan Keyboard Cover (Ishq Movie)', src: 'regional/Parayuvan Keyboard Cover (Ishq movie).mp4',img:'regional/parayuvan.jpg' },
+        { title: 'Thiruvavaniravu Onam', src: 'regional/Thiruvavaniravu _Onam _ Jacobinte Swargarajyam Piano Cover.mp4',img:'regional/jacob.jpg' },
+        { title: 'Uyiril Thodum Keyboard (Kumblangi Nights)', src: 'regional/Uyiril Thodum Keyboard (Kumblangi Nights).mp4',img:'regional/kumbalangi nights.jpg' },
+      ],
+      performance: [
+        { title: 'Cassinno Lawn', src: 'performance/Cassinno Lawn Thrissur Concert.mp4',img:'performance/cassino.jpg' },
+        { title: 'Dhaaga TVF Aspirants', src: 'performance/Dhaaga _ TVF Aspirants _ Kiran X Gaurav X Ronald band.mp4',img:'performance/OAT.jpg' },
+        { title: 'Top 10 Song Mashup at Onam celebration IIT Kanpur', src: 'performance/IIT Kanpur Onam Celebration top 10 Song Piano Mashup.mp4',img:'performance/Main-Auditorium.jpg' },
+        { title: 'Keyboard Performance at Mechanical Freshers, IIT Kanpur', src: 'performance/Keyboard Performance at Mechanical Freshers, IIT Kanpur.mp4',img:'performance/performance.jpg' }
+      ]
+    };
+
+    function showSongs(category) {
+      lastCategory = category;
+      const container = document.getElementById('videoContainer');
+      container.innerHTML = '';
+      videoData[category].forEach(video => {
+        // Create a grid column that spans 4 columns on medium and larger devices, and full width on small devices.
+        const songItem = document.createElement('div');
+        songItem.className = 'col-md-4 col-12 mb-3';
+        songItem.innerHTML = `
+        <div class="position-relative">
+                <!-- Image as background -->
+                <img src="${video.img || 'default.jpg'}" alt="${video.title}" 
+                    class="img-fluid w-100" style="height: 200px; object-fit: cover; border-radius: 8px;">
+
+                <!-- Button overlay -->
+                <button class="btn btn-outline-light position-absolute start-50 translate-middle-x" 
+                    style="bottom: 10px; width: 80%; height: 40px; background: rgba(0, 0, 0, 0.5); color: white; border: none; font-weight: bold;" 
+                    onclick="showVideo('${video.src}', '${video.title}')">
+                    ${video.title}
+                </button>
+            </div>
+        `;
+        container.appendChild(songItem);
+      });
+    }
+
+    function showVideo(src, title) {
+      const container = document.getElementById('videoContainer');  
+      container.innerHTML = `
+        <div class="col-12 text-center">
+          <h3>${title}</h3>
+          <video controls class="w-100">
+            <source src="${src}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <button class="btn btn-primary mt-3" onclick="goBackToSongs()">Back to Song List</button>
+        </div>
+      `;
+    }
+
+    function goBackToSongs() {
+      if (lastCategory) {
+        showSongs(lastCategory);
+      } else {
+        showAllCategories();
+      }
+    }
+
+    function showAllCategories() {
+      document.getElementById('videoContainer').innerHTML = `
+        <div class="alert alert-info text-center">Select a category from the navigation bar to see songs.</div>
+      `;
+      lastCategory = null;
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
